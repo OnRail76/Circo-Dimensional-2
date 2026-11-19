@@ -1,48 +1,138 @@
-name: Compilar Circo Dimensional 2 (AppImage y EXE)
+name: Compilar AppImage Linux y EXE Windows — Release v1.0.0
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/portables.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: circo-dimensional-2-binarios-v1.0.0
+  cancel-in-progress: false
 
 jobs:
   linux_appimage:
     name: AppImage Linux x86_64
     runs-on: ubuntu-22.04
+    timeout-minutes: 35
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Obtener fuentes de la edicion oficial v1.0.0
+        uses: actions/checkout@v4
+        with:
+          ref: v1.0.0
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Dependencia de pruebas visuales
-        run: python -m pip install "Pillow>=11,<13"
-      - name: Comprobar tests
-        run: python -m unittest discover -s tests -v
-      - name: Crear AppImage
+
+      - name: Comprobar codigo y recursos
+        run: |
+          python -m pip install 'Pillow>=11,<13'
+          python -m compileall -q main.py circo tests
+          python -m unittest discover -s tests -v
+          test -f assets/icons/pulpo_normal_256.png
+
+      - name: Construir AppImage autocontenido
         run: bash tools/crear_appimage_linux.sh
-      - name: Publicar AppImage
+
+      - name: Validar archivo AppImage
+        shell: bash
+        run: |
+          set -euo pipefail
+          app="dist/Circo_Dimensional_2_v1.0.0_x86_64.AppImage"
+          test -s "$app"
+          test -x "$app"
+          test "$(stat -c '%s' "$app")" -gt 10000000
+          file "$app"
+          head -c 4 "$app" | od -An -tx1 | grep -qi '7f 45 4c 46'
+          sha256sum "$app"
+          # Verificar que el archivo realmente contiene un AppDir extraible.
+          "$app" --appimage-extract >/dev/null
+          test -f squashfs-root/AppRun
+          test -f squashfs-root/circo-dimensional-2.png
+          test -f squashfs-root/usr/lib/CircoDimensional2/CircoDimensional2
+          rm -rf squashfs-root
+
+      - name: Guardar AppImage como artefacto de Actions
         uses: actions/upload-artifact@v4
         with:
-          name: Circo-Dimensional-2-Linux-AppImage
-          path: dist/*.AppImage
+          name: Circo-Dimensional-2-v1.0.0-Linux-AppImage
+          path: dist/Circo_Dimensional_2_v1.0.0_x86_64.AppImage
           if-no-files-found: error
+
+      - name: Adjuntar AppImage a la Release oficial
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release view v1.0.0 --repo "$GITHUB_REPOSITORY"
+          gh release upload v1.0.0 dist/Circo_Dimensional_2_v1.0.0_x86_64.AppImage \
+            --repo "$GITHUB_REPOSITORY" --clobber
 
   windows_exe:
     name: EXE Windows x64
     runs-on: windows-2022
+    timeout-minutes: 35
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Obtener fuentes de la edicion oficial v1.0.0
+        uses: actions/checkout@v4
+        with:
+          ref: v1.0.0
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Dependencia de pruebas visuales
-        run: python -m pip install "Pillow>=11,<13"
-      - name: Comprobar tests
-        run: python -m unittest discover -s tests -v
-      - name: Crear EXE
+
+      - name: Comprobar codigo y recursos
         shell: pwsh
-        run: ./tools/crear_exe_windows.ps1
-      - name: Publicar EXE
+        run: |
+          python -m pip install 'Pillow>=11,<13'
+          if ($LASTEXITCODE -ne 0) { throw "Fallo instalando Pillow" }
+          python -m compileall -q main.py circo tests
+          if ($LASTEXITCODE -ne 0) { throw "Error de sintaxis" }
+          python -m unittest discover -s tests -v
+          if ($LASTEXITCODE -ne 0) { throw "Fallaron las pruebas" }
+          if (!(Test-Path assets/icons/pulpo_normal.ico)) { throw "Falta el icono" }
+
+      - name: Construir EXE autocontenido
+        shell: pwsh
+        run: |
+          ./tools/crear_exe_windows.ps1
+          if ($LASTEXITCODE -ne 0) { throw "Fallo al crear el EXE" }
+
+      - name: Validar ejecutable de Windows
+        shell: pwsh
+        run: |
+          $f = 'dist/CircoDimensional2.exe'
+          if (!(Test-Path $f)) { throw "No se ha generado el EXE" }
+          if ((Get-Item $f).Length -lt 10000000) { throw "EXE incompleto" }
+          $bytes = [System.IO.File]::ReadAllBytes((Resolve-Path $f))
+          if ($bytes[0] -ne 77 -or $bytes[1] -ne 90) { throw "Cabecera PE invalida" }
+          Get-FileHash $f -Algorithm SHA256
+
+      - name: Renombrar EXE para la Release
+        shell: pwsh
+        run: Copy-Item dist/CircoDimensional2.exe dist/Circo_Dimensional_2_v1.0.0_Windows_x64.exe
+
+      - name: Guardar EXE como artefacto de Actions
         uses: actions/upload-artifact@v4
         with:
-          name: Circo-Dimensional-2-Windows-EXE
-          path: dist/*.exe
+          name: Circo-Dimensional-2-v1.0.0-Windows-EXE
+          path: dist/Circo_Dimensional_2_v1.0.0_Windows_x64.exe
           if-no-files-found: error
+
+      - name: Adjuntar EXE a la Release oficial
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          gh release view v1.0.0 --repo $env:GITHUB_REPOSITORY
+          if ($LASTEXITCODE -ne 0) { throw "Release v1.0.0 no encontrada" }
+          gh release upload v1.0.0 dist/Circo_Dimensional_2_v1.0.0_Windows_x64.exe --repo $env:GITHUB_REPOSITORY --clobber
+          if ($LASTEXITCODE -ne 0) { throw "No se ha podido subir el EXE" }
