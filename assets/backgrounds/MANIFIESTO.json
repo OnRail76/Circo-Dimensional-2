@@ -1,0 +1,47 @@
+[
+  {
+    "mundo": "La Carpa Errante",
+    "fases": "1–5",
+    "clave": "circus",
+    "archivo": "01_carpa_errante.png",
+    "resolucion": "1672x941",
+    "sha256_png": "b68265fca948065051da50b3f35f9ad9b94294b8c8cf6dc1c67748f7f83a8a5b",
+    "sha256_origen_webp": "0786cf800ba8f0c0ca163d9a423763e386fae28f90487bb17a9bac384d6a6fac"
+  },
+  {
+    "mundo": "El Circo Invertido",
+    "fases": "6–10",
+    "clave": "inverted",
+    "archivo": "02_circo_invertido.png",
+    "resolucion": "1672x941",
+    "sha256_png": "9de5b3d2216163d06058cca9cbe7bcd2d9d1613212ffb26e19ebda618ee05aa2",
+    "sha256_origen_webp": "6622c710f34bdda99a61f2cb549aa0b24091a8aa8b071e249567c024fdc2de51"
+  },
+  {
+    "mundo": "Los Jardines de Saturno",
+    "fases": "11–15",
+    "clave": "saturn",
+    "archivo": "03_jardines_saturno.png",
+    "resolucion": "1671x941",
+    "sha256_png": "6b39ea954b4b6e99e044e6489af1be3d828ef7671b9026c229256b0477946135",
+    "sha256_origen_webp": "50d3b5eeedf7d7b09ce5af089ff1389bfedca806f0d4435e7e5f85f86bffb24d"
+  },
+  {
+    "mundo": "El Teatro Fantasma",
+    "fases": "16–20",
+    "clave": "phantom",
+    "archivo": "04_teatro_fantasma.png",
+    "resolucion": "1671x941",
+    "sha256_png": "e2f7a09442400b1808be0ff05341734703dce2aa2f630b011bd20ffe0a1a8440",
+    "sha256_origen_webp": "f0a173de658bcfe812a90e5d685aad904bed57a24b97e7c776d861f581817270"
+  },
+  {
+    "mundo": "El Corazón Dimensional",
+    "fases": "21–25",
+    "clave": "core",
+    "archivo": "05_corazon_dimensional.png",
+    "resolucion": "1671x941",
+    "sha256_png": "2ef22373cce202bb7c6117fcea346e47addfa98c2ead60de94d3ee508bd243c0",
+    "sha256_origen_webp": "fa616a679b4cb325e4e4623c08f2069d6c8b0c44204cb6438c669b37cda5c27d"
+  }
+]

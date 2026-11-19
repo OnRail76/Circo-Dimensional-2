@@ -1,0 +1,27 @@
+CIRCO DIMENSIONAL 2 - EDICIÓN DEFINITIVA v1.0.0
+© 2026 Tony C. Ware
+
+Este paquete contiene juego completo, fuentes, carátula oficial, historia original,
+manual ilustrado y atlas visual con memoria técnica.
+
+LINUX / BAZZITE
+  bash iniciar_linux.sh
+  Para crear AppImage: bash CREAR_APPIMAGE_LINUX.sh
+
+WINDOWS
+  Doble clic en iniciar_windows.bat
+  Para crear EXE: PowerShell con tools/crear_exe_windows.ps1
+
+MANUALES
+  docs/MANUAL_ILUSTRADO_CIRCO_DIMENSIONAL_2_v1.0.0.pdf
+  docs/ATLAS_VISUAL_Y_MEMORIA_CIRCO_DIMENSIONAL_2_v1.0.0.pdf
+
+GITHUB
+  Crear repositorio NUEVO (recomendado: OnRail76/Circo-Dimensional-2).
+  Consultar PUBLICAR_EN_GITHUB.md, o ejecutar:
+  bash PUBLICAR_EN_GITHUB.sh OnRail76/Circo-Dimensional-2
+
+AVISO: los scripts de compilación están incluidos pero este ZIP no contiene
+un AppImage o EXE precompilado. Se debe verificar el resultado en el equipo.
+
+NOTA: jugabilidad idéntica a 0.3.7; numeración v1.0.0 para publicación final.

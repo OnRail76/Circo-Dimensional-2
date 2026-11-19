@@ -1,0 +1,12 @@
+# Dependencias locales
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Productos compilados, caché del empaquetado
+.build/
+build/
+dist/
+*.spec
+*.AppImage
