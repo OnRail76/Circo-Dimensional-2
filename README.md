@@ -8,6 +8,16 @@
 
 **La historia original íntegra**, escrita por el autor, está en [HISTORIA_ORIGINAL.txt](HISTORIA_ORIGINAL.txt). Esta edición conserva la jugabilidad de la **v0.3.7**; el cambio a 1.0.0 corresponde a la publicación definitiva y a la documentación.
 
+## Descargar el juego listo para ejecutar
+
+**Edición definitiva v1.0.0 — no necesita instalar Python ni Pygame.** Los ejecutables autónomos se generan en GitHub Actions a partir del código de la etiqueta `v1.0.0`.
+
+- **Linux x86_64 (AppImage):** [Descargar Circo_Dimensional_2_v1.0.0_x86_64.AppImage](https://github.com/OnRail76/Circo-Dimensional-2/releases/download/v1.0.0/Circo_Dimensional_2_v1.0.0_x86_64.AppImage). Descarga, marca como ejecutable y abre el juego. En distribuciones sin FUSE prueba `APPIMAGE_EXTRACT_AND_RUN=1 ./Circo_Dimensional_2_v1.0.0_x86_64.AppImage`.
+- **Windows x64 (EXE):** [Descargar Circo_Dimensional_2_v1.0.0_Windows_x64.exe](https://github.com/OnRail76/Circo-Dimensional-2/releases/download/v1.0.0/Circo_Dimensional_2_v1.0.0_Windows_x64.exe). Descarga y ejecuta el archivo.
+- [**Release v1.0.0**](https://github.com/OnRail76/Circo-Dimensional-2/releases/tag/v1.0.0): también incluye el ZIP con fuentes, manual ilustrado, atlas corregido y carátula.
+
+La compilación automática y las comprobaciones de estructura han terminado correctamente en GitHub Actions. Todavía se recomienda probar una partida completa en cada sistema.
+
 ## El juego
 
 Arcade de pantalla fija inspirado en la mecánica de división de enemigos de *Pang*, pero con identidad, personajes, gráficos y música propios. Dom debe eliminar pulpos saltarines con su látigo láser. Los pulpos grandes se dividen hasta desaparecer. **25 fases** repartidas entre La Carpa Errante, El Circo Invertido, Jardines de Saturno, El Teatro Fantasma y Corazón Dimensional. La fase 25 incorpora al Pulpo Primordial.
@@ -34,7 +44,7 @@ El primer arranque crea un `.venv` local e instala **pygame-ce==2.5.8** desde pa
 bash CREAR_APPIMAGE_LINUX.sh
 ```
 
-**La descarga de este repositorio no incluye un AppImage ya compilado.** El script genera `dist/Circo_Dimensional_2_v1.0.0_x86_64.AppImage` cuando se ejecuta correctamente en Linux x86_64. Para sistemas sin FUSE, puede ayudar `APPIMAGE_EXTRACT_AND_RUN=1`.
+**El archivo ZIP de fuentes no contiene el AppImage; está disponible en la Release oficial.** El script genera `dist/Circo_Dimensional_2_v1.0.0_x86_64.AppImage` cuando se ejecuta correctamente en Linux x86_64. Para sistemas sin FUSE, puede ayudar `APPIMAGE_EXTRACT_AND_RUN=1`.
 
 ### Windows
 
@@ -44,7 +54,7 @@ Ejecuta `iniciar_windows.bat` con Python instalado. Para construir un **EXE aut�
 powershell -ExecutionPolicy Bypass -File tools/crear_exe_windows.ps1
 ```
 
-El resultado previsto es `dist/CircoDimensional2.exe`; **no se incluye un ejecutable Windows precompilado**. El workflow [portables.yml](.github/workflows/portables.yml) permite compilar binarios para Linux y Windows usando GitHub Actions, una vez publicado el código.
+El resultado previsto es `dist/CircoDimensional2.exe`; **el EXE precompilado se descarga desde la Release oficial**. El workflow [portables.yml](.github/workflows/portables.yml) permite compilar binarios para Linux y Windows usando GitHub Actions, una vez publicado el código.
 
 ## Controles
 
