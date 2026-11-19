@@ -1,0 +1,94 @@
+name: Publicar Release oficial v1.0.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publicar-release-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: circo-dimensional-2-release-v1.0.0
+  cancel-in-progress: false
+
+jobs:
+  publicacion:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - name: Obtener fuentes completas
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencia de pruebas
+        run: python -m pip install 'Pillow>=11,<13'
+
+      - name: Validar el codigo y ejecutar pruebas
+        run: |
+          python -m compileall -q main.py circo tests
+          python -m unittest discover -s tests -v
+
+      - name: Comprobar material definitivo y empaquetar
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile
+          root = Path('.')
+          expected = [
+              'main.py', 'README.md', 'LICENSE', 'HISTORIA_ORIGINAL.txt',
+              'RELEASE_NOTES.md', 'circo/config.py',
+              'docs/MANUAL_ILUSTRADO_CIRCO_DIMENSIONAL_2_v1.0.0.pdf',
+              'docs/ATLAS_VISUAL_Y_MEMORIA_CIRCO_DIMENSIONAL_2_v1.0.0.pdf',
+              'assets/cover/caratula_oficial.png',
+          ]
+          for name in expected:
+              item = root / name
+              assert item.is_file() and item.stat().st_size > 0, f'Falta material: {name}'
+          assert (root / 'docs/ATLAS_VISUAL_Y_MEMORIA_CIRCO_DIMENSIONAL_2_v1.0.0.pdf').stat().st_size > 1_000_000
+          assert (root / 'docs/MANUAL_ILUSTRADO_CIRCO_DIMENSIONAL_2_v1.0.0.pdf').stat().st_size > 1_000_000
+          from circo.config import VERSION
+          assert VERSION == '1.0.0', f'Version inesperada: {VERSION}'
+          paths = [
+              p for p in root.rglob('*') if p.is_file()
+              and not any(x in ('.git', '.build', '.venv', 'dist', 'build', '__pycache__', '.pytest_cache') for x in p.parts)
+              and p.suffix not in ('.pyc', '.spec')
+          ]
+          assert len(paths) >= 120, f'Paquete incompleto: {len(paths)} archivos'
+          output = Path('dist/release/Circo_Dimensional_2_v1.0.0_Juego_Fuentes_Manuales.zip')
+          output.parent.mkdir(parents=True, exist_ok=True)
+          with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as z:
+              for p in sorted(paths):
+                  z.write(p, 'Circo-Dimensional-2/' + p.as_posix())
+          with zipfile.ZipFile(output) as z:
+              assert z.testzip() is None
+          print(f'ZIP verificado: {len(paths)} archivos, {output.stat().st_size} bytes')
+          PY
+
+      - name: Crear la Release v1.0.0
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v1.0.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo 'La Release v1.0.0 ya existe: no se sobreescribe.'
+            exit 0
+          fi
+          gh release create v1.0.0 \
+            'dist/release/Circo_Dimensional_2_v1.0.0_Juego_Fuentes_Manuales.zip' \
+            'docs/MANUAL_ILUSTRADO_CIRCO_DIMENSIONAL_2_v1.0.0.pdf#Circo_Dimensional_2_v1.0.0_Manual_Ilustrado.pdf' \
+            'docs/ATLAS_VISUAL_Y_MEMORIA_CIRCO_DIMENSIONAL_2_v1.0.0.pdf#Circo_Dimensional_2_v1.0.0_Atlas_y_Memoria.pdf' \
+            'assets/cover/caratula_oficial.png#Circo_Dimensional_2_Caratula_Oficial.png' \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title 'Circo Dimensional 2 — v1.0.0 (Edicion definitiva)' \
+            --notes-file RELEASE_NOTES.md \
+            --latest
+          gh release view v1.0.0 --repo "$GITHUB_REPOSITORY" --json url,assets --jq '.url, (.assets[] | .name)'
