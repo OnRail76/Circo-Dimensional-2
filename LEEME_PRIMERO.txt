@@ -1,27 +1,28 @@
-CIRCO DIMENSIONAL 2 - EDICIÓN DEFINITIVA v1.0.0
+CIRCO DIMENSIONAL 2 - EDICION OFICIAL v1.0.0
 © 2026 Tony C. Ware
 
-Este paquete contiene juego completo, fuentes, carátula oficial, historia original,
-manual ilustrado y atlas visual con memoria técnica.
+JUEGO PUBLICADO (Linux x86_64 y Windows x64):
+https://github.com/OnRail76/Circo-Dimensional-2/releases/tag/v1.0.0
 
 LINUX / BAZZITE
-  bash iniciar_linux.sh
-  Para crear AppImage: bash CREAR_APPIMAGE_LINUX.sh
+  Descargar el AppImage de la Release y hacerlo ejecutable.
+  Para iniciar desde codigo fuente: bash iniciar_linux.sh
+  Para construir AppImage: bash CREAR_APPIMAGE_LINUX.sh
 
 WINDOWS
-  Doble clic en iniciar_windows.bat
-  Para crear EXE: PowerShell con tools/crear_exe_windows.ps1
+  Descargar el EXE autonomo de la Release.
+  Para iniciar desde codigo fuente: iniciar_windows.bat
+  Para construir EXE: PowerShell con tools/crear_exe_windows.ps1
 
-MANUALES
+DOCUMENTACION DEFINITIVA
   docs/MANUAL_ILUSTRADO_CIRCO_DIMENSIONAL_2_v1.0.0.pdf
   docs/ATLAS_VISUAL_Y_MEMORIA_CIRCO_DIMENSIONAL_2_v1.0.0.pdf
 
-GITHUB
-  Crear repositorio NUEVO (recomendado: OnRail76/Circo-Dimensional-2).
-  Consultar PUBLICAR_EN_GITHUB.md, o ejecutar:
-  bash PUBLICAR_EN_GITHUB.sh OnRail76/Circo-Dimensional-2
+ESTADO DE GITHUB
+  El repositorio, la etiqueta y la Release oficiales ya existen.
+  No ejecutar scripts de creacion inicial sobre un repo publicado.
+  Las pruebas automaticas estan en .github/workflows/tests.yml.
+  Los paquetes Linux y Windows se construyen en .github/workflows/portables.yml.
 
-AVISO: los scripts de compilación están incluidos pero este ZIP no contiene
-un AppImage o EXE precompilado. Se debe verificar el resultado en el equipo.
-
-NOTA: jugabilidad idéntica a 0.3.7; numeración v1.0.0 para publicación final.
+NOTA: jugabilidad aprobada desde v0.3.7; el numero v1.0.0
+identifica el hito de publicacion definitivo.

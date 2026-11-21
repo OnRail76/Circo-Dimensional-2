@@ -116,9 +116,9 @@ python -m pytest -q
 
 **65 pruebas de código y recursos superadas en un entorno con Pillow** al preparar la edición. Se han comprobado la integridad de los ZIP/PDF y la sintaxis; no se ha ejecutado una sesión gráfica completa ni compilado el AppImage/EXE en este entorno. Los workflows son procedimientos de compilación, no certificados de funcionamiento en todos los equipos.
 
-## Publicación en GitHub
+## Publicación y mantenimiento
 
-Consulta [PUBLICAR_EN_GITHUB.md](PUBLICAR_EN_GITHUB.md) para crear un **repositorio nuevo** sin tocar el de Circo Dimensional 48K. Recomendación: etiqueta `v1.0.0`, Release `Circo Dimensional 2 — Edición definitiva` y adjuntos de distribución.
+La **[release oficial v1.0.0](https://github.com/OnRail76/Circo-Dimensional-2/releases/tag/v1.0.0)** ya está publicada y contiene el AppImage Linux, EXE Windows, fuentes, carátula, manual y atlas. Los workflows de [pruebas](.github/workflows/tests.yml) y [binarios portables](.github/workflows/portables.yml) mantienen la compilación verificable. Los scripts iniciales para crear un repositorio nuevo se retiraron por estar obsoletos. Cualquier futura revisión debe basarse en el repositorio existente y proteger la edición publicada.
 
 ## Licencia y créditos
 
